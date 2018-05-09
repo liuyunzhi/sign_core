@@ -14,11 +14,8 @@ namespace app\controllers;
 
 use yii;
 use yii\web\Controller;
-use yii\helpers\Json;
-use Hprose\Http\Client;
 use app\library\ClassLib;
-use app\models\UserPackageItemService;
-use app\models\GroupBalanceService;
+use app\models\StudentService;
 
 class ApiController extends Controller{
 
@@ -39,11 +36,11 @@ class ApiController extends Controller{
         $method = $request->get('method');
 
         if($method == ''){
-            ClassLib::exit_json(10002);
+            ClassLib::exit_json('100001');
         }
 
         if(method_exists($this, $method) == false){
-            ClassLib::exit_json(10003);
+            ClassLib::exit_json('100002');
         }
 
         call_user_func(array($this, $method));
@@ -53,14 +50,21 @@ class ApiController extends Controller{
      * 登录验证
      */
     private function login() {
-        ClassLib::exit_json(10000);
-        // $params = ClassLib::verify_param(['account', 'password']);
-        // $account = $params['account'];
-        // $password = $params['password'];
-        // if (!$account || !$password) {
-        //     ClassLib::exit_json(10004);
-        // } else {
-        //     ClassLib::exit_json(10000);
-        // }
+        $params = ClassLib::verify_post_params(['account', 'password']);
+        $account = $params['account'];
+        $password = $params['password'];
+        $student = StudentService::getStudent($account);
+        if (empty($student)) {
+            ClassLib::exit_json('200001');
+        }
+        if (StudentService::validate($student, $password)) {
+            ClassLib::exit_json('000000');
+        } else {
+            ClassLib::exit_json('200002');
+        }
+    }
+
+    public function actionTest(){
+        var_dump(StudentService::registerStudent('201413030124','123456','513401199607060627','蒋宇东',1,'信息科学与技术学院','计算机科学与技术','18782264447'));
     }
 }

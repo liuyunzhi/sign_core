@@ -16,47 +16,58 @@ use yii\helpers\Json;
 class ClassLib{
 
     /**
-     * 测试打印方法
-     * @param string $string
-     * @param int $return
-     */
-    public static function pre( $string = null, $return = 1 ){
-        echo '<pre>';
-        print_r($string);
-        echo '</pre>';
-        if($return == 1){
-            exit;
-        }
-    }
-
-    /**
-     * 调试日志记录
+     * 记录调试日志
      * @param unknown $message
      */
     public static function debug_log($message){
-        $logfile = yii::$app->basePath . '/runtime/' . date("Ymd") . ".log";
+        $logFile = yii::$app->basePath . '/runtime/' . date("Ymd") . ".log";
         $time = date("Y-m-d H:i:s", time());
-        $fp = @fopen($logfile, 'a');
-        @fwrite($fp, $time . "\r\n");
-        @fwrite($fp, var_export($message, true) . "\r\n" . "\r\n");
-        @fclose($fp);
+        $handle = @fopen($logFile, 'a');
+        @fwrite($handle, $time . PHP_EOL);
+        @fwrite($handle, var_export($message, true) . PHP_EOL . PHP_EOL);
+        @fclose($handle);
     }
 
     /**
      * 系统返回json格式化方法
-     * @param int $code
-     * @param string $message
-     * @param array $params
+     * @param string $code 状态码
+     * @param string $data 返回数据
      */
-    public static function exit_json($code = 0, $params = NULL, $return_type = 'json' ){
+    public static function exit_json($code = '0', $data = ''){
 
-        $data = array('code' =>$code , 'message' => ApiCode::$code[$code], 'data' => $params);
-        if($return_type == 'json'){
-            exit(Json::encode($data));
-        }elseif($return_type == 'array'){
-            return $data;
+        exit(Json::encode(array('code' => $code , 'message' => ApiCode::$codeMap[$code], 'data' => $data)));
+    }
+    
+    /**
+     *公用验证POST参数
+     *@param $template_params 参数模板
+     * $template_params=["uid","username","pic","email","note"];
+     */
+    public static function verify_post_params($template_params)
+    {
+        $request = yii::$app->getRequest();
+        if(!$request->isPost){
+            ClassLib::exit_json('100003');
         }
-
+        $params = $request->post('params');
+        if(empty($params)){
+            self::exit_json('100004');
+        }
+        $request_data = Json::decode($params, true);
+        if(!is_array($request_data)){
+            self::exit_json('100005');
+        }
+        $template_data = array_flip($template_params);
+        $lack = array_diff_key($template_data, $request_data);
+        foreach ($lack as $key => $value) {
+            self::exit_json('100006', $key);
+        }
+        foreach ($request_data as $key => $value) {
+            if (is_null($value) || $value == "") {
+                self::exit_json('100007', $key);
+            }
+        }
+        return $request_data;
     }
 
     /**
@@ -177,6 +188,26 @@ class ClassLib{
             return ['datetime' => date("Y-m-d H:i:s", $timestamp), 'timestamp' => $timestamp];
         }
         return false;
+    }
+
+    /**
+     *公用验证GET参数
+     *@param $params
+     * $params=["uid","username","pic","email","note"];
+     */
+    public static function verify_get_params($params)
+    {
+        $request       = yii::$app->getRequest();
+        if($request->isGet == false){
+            ClassLib::exit_json(10001);
+        }
+        $temp_data = $request->get();
+        foreach ($params as $v) {
+            if (!array_key_exists($v,$temp_data)) {
+                self::exit_json(10011, ['errorMsg' => $v]);
+            }
+        }
+        return $temp_data;
     }
 
     /**
