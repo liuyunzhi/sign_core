@@ -58,7 +58,17 @@ class ApiController extends Controller{
             ClassLib::exit_json('200001');
         }
         if (StudentService::validate($student, $password)) {
-            ClassLib::exit_json('000000');
+            $studentInfo = [
+                'student_id' => $student->student_id,
+                'person_id' => $student->person_id,
+                'name' => $student->name,
+                'gender' => $student->gender ? '女' : '男',
+                'college' => $student->college,
+                'faculty' => $student->faculty,
+                'faculty' => $student->faculty,
+                'phone' => $student->phone,
+            ];
+            ClassLib::exit_json('000000', $studentInfo);
         } else {
             ClassLib::exit_json('200002');
         }
