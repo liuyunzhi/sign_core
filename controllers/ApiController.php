@@ -16,6 +16,7 @@ use yii;
 use yii\web\Controller;
 use app\library\ClassLib;
 use app\models\StudentService;
+use app\models\CourseService;
 
 class ApiController extends Controller{
 
@@ -75,6 +76,6 @@ class ApiController extends Controller{
     }
 
     public function actionTest(){
-        var_dump(StudentService::registerStudent('201413030124','123456','513401199607060627','蒋宇东',1,'信息科学与技术学院','计算机科学与技术','18782264447'));
+        var_dump(CourseService::addCourse('毕业设计', '6A108', '120.8888', '120.5555', '2018-4-5 14:50:00', 'XXX'));
     }
 }

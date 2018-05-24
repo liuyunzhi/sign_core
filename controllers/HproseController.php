@@ -5,7 +5,7 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use Hprose\Yii\Server;
-use app\models\User;
+use app\models\CourseService;
 
 class HproseController extends Controller{
 
@@ -19,8 +19,8 @@ class HproseController extends Controller{
         $server = new Server();
         $server->setGetEnabled(true);
 
-        $test = new User();
-        $server->addInstanceMethods($test);
+        $courseService = new CourseService();
+        $server->addClassMethods($courseService);
 
         return $server->start();
     }
