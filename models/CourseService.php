@@ -43,7 +43,7 @@ class CourseService{
                     case 'name':
                         $courses->andWhere(['like','name',$value]);
                         break;
-                    case 'nickname':
+                    case 'position':
                         $courses->andWhere(['like','position',$value]);
                         break;
                     case 'created_date':
@@ -84,8 +84,8 @@ class CourseService{
         $list = array();
         foreach ($courses_array as $course) {
             $list[] = [
-            	'course_id' => $course->id,
-            	'course_name' => $course->name,
+            	'id' => $course->id,
+            	'name' => $course->name,
                 'position' => $course->position,
             	'longitude' => $course->longitude,
             	'latitude' => $course->latitude,
