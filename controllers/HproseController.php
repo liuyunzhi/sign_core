@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use Hprose\Yii\Server;
 use app\models\CourseService;
+use app\models\StudentService;
 
 class HproseController extends Controller{
 
@@ -20,7 +21,10 @@ class HproseController extends Controller{
         $server->setGetEnabled(true);
 
         $courseService = new CourseService();
+        $studentService = new StudentService();
+
         $server->addClassMethods($courseService);
+        $server->addClassMethods($studentService);
 
         return $server->start();
     }

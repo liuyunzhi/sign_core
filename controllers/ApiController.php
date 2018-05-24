@@ -76,6 +76,6 @@ class ApiController extends Controller{
     }
 
     public function actionTest(){
-        var_dump(CourseService::addCourse('毕业设计', '6A108', '120.8888', '120.5555', '2018-4-5 14:50:00', 'XXX'));
+        var_dump(CourseService::getCourseByIds(2));
     }
 }

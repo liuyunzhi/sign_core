@@ -2,7 +2,7 @@
 /**
  * 学生模型
  *
- * Student
+ * Students
  * @copyright cdut
  * @author liuyunzhi
  * @time 2018-05-08
@@ -13,7 +13,7 @@ namespace app\models;
 use yii;
 use yii\db\ActiveRecord;
 
-class Student extends ActiveRecord{
+class Students extends ActiveRecord{
 
     public static function tableName(){
         return '{{%students}}';

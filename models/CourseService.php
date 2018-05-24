@@ -107,6 +107,25 @@ class CourseService{
     }
 
     /**
+     * 根据ID获取课程信息
+     * 
+     * @param array $ids 课程ID
+     * @return array 课程信息
+     */
+    public static function getCourseByIds( $ids = null ) {
+
+        if (empty($ids)) {
+            $courses = Course::find();
+        } else {
+            $courses = self::searchCourses(['id' => $ids]);
+        }
+
+        $courses_array = $courses->orderBy('id asc')->asArray()->all();
+
+        return $courses_array;
+    }
+
+    /**
      * 添加course
      * 
      * @param string $name 课程名
