@@ -11,6 +11,7 @@
 namespace app\models;
 
 use yii;
+use yii\data\Pagination;
 
 class StudentService{
 
@@ -110,6 +111,8 @@ class StudentService{
         $student->college = $college;
         $student->faculty = $faculty;
         $student->phone = $phone;
+        $student->created_date = date('Y-d-m H:i:s');
+        $student->update_date = date('Y-d-m H:i:s');
         return $student->insert();
     }
 
@@ -139,12 +142,13 @@ class StudentService{
         foreach ($students_array as $student) {
             $list[] = [
             	'id' => $student->id,
+                'student_id' => $student->student_id,
+                'person_id' => $student->person_id,
             	'name' => $student->name,
-                'position' => $student->position,
-            	'longitude' => $student->longitude,
-            	'latitude' => $student->latitude,
-            	'time' => $student->time,
-            	'teacher' => $student->teacher,
+            	'gender' => $student->gender,
+            	'college' => $student->college,
+            	'faculty' => $student->faculty,
+            	'phone' => $student->phone,
             	'created_date' => $student->created_date,
             	'update_date' => $student->update_date
             ];
@@ -194,6 +198,7 @@ class StudentService{
         $student->college = $college;
         $student->faculty = $faculty;
         $student->phone = $phone;
+        $student->update_date = date('Y-d-m H:i:s');
         return $student->update();
     }
 
@@ -206,6 +211,7 @@ class StudentService{
     public static function modifyPassword($id, $password) {
         $student = Students::findOne($id);
         $student->setPassword($password);
+        $student->update_date = date('Y-d-m H:i:s');
         return $student->update();
     }
 

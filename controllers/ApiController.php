@@ -75,7 +75,4 @@ class ApiController extends Controller{
         }
     }
 
-    public function actionTest(){
-        var_dump(CourseService::getCourseByIds(2));
-    }
 }
