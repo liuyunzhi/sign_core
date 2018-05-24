@@ -92,7 +92,7 @@ class CourseService{
             	'time' => $course->time,
             	'teacher' => $course->teacher,
             	'created_date' => $course->created_date,
-            	'updated_date' => $course->updated_date
+            	'update_date' => $course->update_date
             ];
         }
 
