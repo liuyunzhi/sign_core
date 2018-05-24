@@ -111,8 +111,8 @@ class StudentService{
         $student->college = $college;
         $student->faculty = $faculty;
         $student->phone = $phone;
-        $student->created_date = date('Y-d-m H:i:s');
-        $student->update_date = date('Y-d-m H:i:s');
+        $student->created_date = date('Y-m-d H:i:s');
+        $student->update_date = date('Y-m-d H:i:s');
         return $student->insert();
     }
 
