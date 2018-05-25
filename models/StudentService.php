@@ -16,6 +16,16 @@ use yii\data\Pagination;
 class StudentService{
 
     /**
+     * 根据student_id获取student对象
+     * 
+     * @param int $student_id 学号
+     * @return Object
+     */
+    public static function getStudent($student_id) {
+        return Students::findOne(['student_id' => $student_id]);
+    }
+
+    /**
      * 按条件查找学生
      * [
      *  'id' => ,
@@ -66,16 +76,6 @@ class StudentService{
         }
 
         return $students;
-    }
-
-    /**
-     * 根据student_id获取student对象
-     * 
-     * @param int $student_id 学号
-     * @return Object
-     */
-    public static function getStudent($student_id) {
-        return self::searchStudents(['student_id' => $student_id]);
     }
 
     /**
