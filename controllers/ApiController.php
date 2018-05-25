@@ -60,6 +60,7 @@ class ApiController extends Controller{
         }
         if (StudentService::validate($student, $password)) {
             $studentInfo = [
+                'id' => $student->id,
                 'student_id' => $student->student_id,
                 'person_id' => $student->person_id,
                 'name' => $student->name,
@@ -72,6 +73,26 @@ class ApiController extends Controller{
             ClassLib::exit_json('000000', $studentInfo);
         } else {
             ClassLib::exit_json('200002');
+        }
+    }
+
+    private function getCurrentCourse(){
+        $params = ClassLib::verify_post_params(['id']);
+        $id = $params['id'];
+        $course = StudentService::getCourseById($id);
+        if ($course) {
+            $courseInfo = [
+                'id' => $course->id,
+                'name' => $course->name,
+                'position' => $course->position,
+                'time' => $course->time,
+                'longitude' => $course->longitude,
+                'latitude' => $course->latitude,
+                'teacher' => $course->teacher
+            ];
+            ClassLib::exit_json('000000', $courseInfo);
+        } else {
+            ClassLib::exit_json('200003');
         }
     }
 

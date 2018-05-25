@@ -19,4 +19,14 @@ class Courses extends ActiveRecord{
         return '{{%courses}}';
     }
 
+    /**
+     * join query
+     * 
+     * @return object all the students who choose the current course
+     */
+    public function getStudents()
+    {
+        return $this->hasMany(Students::className(), ['id' => 'student_id'])
+            ->viaTable('{{%student_course}}', ['course_id' => 'id']);
+    }
 }

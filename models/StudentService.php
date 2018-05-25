@@ -224,4 +224,23 @@ class StudentService{
         $course = Students::findOne($id);
         return $course->delete();
     }
+
+    /**
+     * 根据ID获取学生选课信息
+     * 
+     * @param array $id ID
+     * @return object 所选课程信息
+     */
+    public static function getCourseById($id) {
+
+        $student = Students::findOne($id);
+
+        if (is_null($student)) {
+            return false;
+        } else {
+            $result = $student->getCourses()->where('time>=:time',[':time'=>date('Y-m-d H:i:s')])->orderBy('time asc')->one();
+        }
+
+        return $result;
+    }
 }

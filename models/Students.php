@@ -40,4 +40,14 @@ class Students extends ActiveRecord{
         return Yii::$app->getSecurity()->validatePassword($password, $this->password_hash);
     }
 
+    /**
+     * join query
+     * 
+     * @return object all the current students' courses
+     */
+    public function getCourses()
+    {
+        return $this->hasMany(Courses::className(), ['id' => 'course_id'])
+            ->viaTable('{{%student_course}}', ['student_id' => 'id']);
+    }
 }
