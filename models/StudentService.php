@@ -205,11 +205,10 @@ class StudentService{
     /**
      * 修改密码
      * 
-     * @param int $id
+     * @param object $student
      * @param string $password
      */
-    public static function modifyPassword($id, $password) {
-        $student = Students::findOne($id);
+    public static function modifyPassword($student, $password) {
         $student->setPassword($password);
         $student->update_date = date('Y-d-m H:i:s');
         return $student->update();

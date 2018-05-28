@@ -96,4 +96,21 @@ class ApiController extends Controller{
         }
     }
 
+    private function modifyPasword() {
+        $params = ClassLib::verify_post_params(['account','old','new']);
+        $account = $params['account'];
+        $old = $params['old'];
+        $new = $params['new'];
+        $student = StudentService::getStudent($account);
+        if (StudentService::validate($student, $old)) {
+            if (StudentService::modifyPassword($student, $new)) {
+                ClassLib::exit_json('000000');
+            } else {
+                ClassLib::exit_json('999999');
+            }
+        } else {
+            ClassLib::exit_json('200004');
+        }
+    }
+
 }
