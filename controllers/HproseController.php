@@ -7,6 +7,7 @@ use yii\web\Controller;
 use Hprose\Yii\Server;
 use app\models\CourseService;
 use app\models\StudentService;
+use app\models\RecordService;
 
 class HproseController extends Controller{
 
@@ -22,9 +23,11 @@ class HproseController extends Controller{
 
         $courseService = new CourseService();
         $studentService = new StudentService();
+        $recordService = new RecordService();
 
         $server->addClassMethods($courseService);
         $server->addClassMethods($studentService);
+        $server->addClassMethods($recordService);
 
         return $server->start();
     }
