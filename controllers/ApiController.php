@@ -17,6 +17,7 @@ use yii\web\Controller;
 use app\library\ClassLib;
 use app\models\StudentService;
 use app\models\CourseService;
+use app\models\RecordService;
 
 class ApiController extends Controller{
 

@@ -91,7 +91,7 @@ class RecordService{
      * @param int $page 页码
      * @param int $page_size 每页大小
      * @param array $searching 检索条件
-     * @return array 课程列表
+     * @return array 考勤记录列表
      */
     public static function getRecordList( $page, $page_size, $searching ) {
 
@@ -136,7 +136,7 @@ class RecordService{
      * 更新考勤记录信息
      * 
      * @param int $id ID
-     * @param int $result 考勤结果
+     * @param int 更新行数
      */
     public static function updateRecord($id, $result) {
         $student = Records::findOne($id);
@@ -146,39 +146,81 @@ class RecordService{
     }
 
     /**
-     * 根据ID获取学生信息
+     * 根据学生ID获取考勤记录列表
      * 
-     * @param array $ids ID
-     * @return array 学生信息
+     * @param int $id ID
+     * @return array 考勤记录列表
      */
-    public static function getStudentByIds( $ids = null ) {
+    public static function getRecordListByStudentId( $student_id, $page, $page_size ) {
 
-        if (empty($ids)) {
-            $students = Students::find();
-        } else {
-            $students = self::searchStudents(['id' => $ids]);
+        $records = self::searchRecords(['student_id' => $student_id]);
+
+		$records_count = $records->count();
+		$Pagination = new Pagination(['totalCount' => $records_count]);
+        $Pagination->SetPageSize($page_size);
+        $Pagination->SetPage($page);
+        $records_array = $records->offset($Pagination->offset)->limit($Pagination->limit)->orderBy('id asc')->all();
+
+        $list = array();
+        foreach ($records_array as $record) {
+            $list[] = [
+            	'id' => $record->id,
+                'course' => $record->course->name,
+            	'result' => $record->result,
+            	'longitude' => $record->longitude,
+            	'latitude' => $record->latitude,
+            	'time' => $record->time,
+            	'created_date' => $record->created_date,
+            	'update_date' => $record->update_date
+            ];
         }
 
-        $students_array = $students->orderBy('id asc')->asArray()->all();
+		$result = [
+            'total' => $records_count,
+            'page_size' => $page_size,
+            'page' => $page,
+            'list' => $list
+        ];
 
-        return $students_array;
+        return $result;
     }
 
     /**
-     * 根据ID获取学生选课信息
+     * 根据课程ID获取考勤记录列表
      * 
-     * @param array $id ID
-     * @return object 所选课程信息
+     * @param int $id ID
+     * @return array 考勤记录列表
      */
-    public static function getCourseById($id) {
+    public static function getRecordListByCourseId( $course_id, $page, $page_size ) {
 
-        $student = Students::findOne($id);
+        $records = self::searchRecords(['course_id' => $course_id]);
 
-        if (is_null($student)) {
-            return false;
-        } else {
-            $result = $student->getCourses()->where('time>=:time',[':time'=>date('Y-m-d H:i:s')])->orderBy('time asc')->one();
+		$records_count = $records->count();
+		$Pagination = new Pagination(['totalCount' => $records_count]);
+        $Pagination->SetPageSize($page_size);
+        $Pagination->SetPage($page);
+        $records_array = $records->offset($Pagination->offset)->limit($Pagination->limit)->orderBy('id asc')->all();
+
+        $list = array();
+        foreach ($records_array as $record) {
+            $list[] = [
+            	'id' => $record->id,
+                'student' => $record->student->name,
+            	'result' => $record->result,
+            	'longitude' => $record->longitude,
+            	'latitude' => $record->latitude,
+            	'time' => $record->time,
+            	'created_date' => $record->created_date,
+            	'update_date' => $record->update_date
+            ];
         }
+
+		$result = [
+            'total' => $records_count,
+            'page_size' => $page_size,
+            'page' => $page,
+            'list' => $list
+        ];
 
         return $result;
     }
