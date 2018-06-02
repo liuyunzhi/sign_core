@@ -180,4 +180,18 @@ class CourseService{
         $course = Courses::findOne($id);
         return $course->delete();
     }
+
+    /**
+     * 获取所有科目
+     */
+    public static function getSubjects() {
+        $date = Courses::find()->select('name')->distinct()->asArray()->all();
+        $subjects = array();
+
+        foreach ($date as $value) {
+            array_push($subjects, $value['name']);
+        }
+
+        return $subjects;
+    }
 }
