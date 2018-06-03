@@ -224,4 +224,24 @@ class RecordService{
 
         return $result;
     }
+
+    /**
+     * 获取出勤率
+     */
+    public static function getAttendanceRate() {
+
+        $regular_records = Records::find()->select(['course_id', "count(course_id) as total"])->where(['result'=>[0,4]])->groupBy('course_id')->indexBy('course_id')->asArray()->all();
+        $all_records = Records::find()->select('course_id, count(course_id) as total')->groupBy('course_id')->indexBy('course_id')->asArray()->all();
+        $rates = array();
+
+        foreach ($all_records as $key => $value) {
+            if (isset($regular_records[$key])) {
+                $rates[$key] = $regular_records[$key]['total'] / $value['total'];
+            } else {
+                $rates[$key] = 0 / $value['total'];
+            }
+        }
+        
+        return $rates;
+    }
 }

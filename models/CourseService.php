@@ -194,4 +194,18 @@ class CourseService{
 
         return $subjects;
     }
+
+    /**
+     * 获取所有教师
+     */
+    public static function getTeachers() {
+        $date = Courses::find()->select('teacher')->distinct()->asArray()->all();
+        $teachers = array();
+
+        foreach ($date as $value) {
+            array_push($teachers, $value['teacher']);
+        }
+
+        return $teachers;
+    }
 }
