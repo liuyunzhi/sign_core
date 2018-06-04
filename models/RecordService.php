@@ -105,7 +105,7 @@ class RecordService{
 		$Pagination = new Pagination(['totalCount' => $records_count]);
         $Pagination->SetPageSize($page_size);
         $Pagination->SetPage($page);
-        $records_array = $records->offset($Pagination->offset)->limit($Pagination->limit)->orderBy('id asc')->all();
+        $records_array = $records->offset($Pagination->offset)->limit($Pagination->limit)->orderBy('id desc')->all();
 
         $list = array();
         foreach ($records_array as $record) {
@@ -159,16 +159,18 @@ class RecordService{
 		$Pagination = new Pagination(['totalCount' => $records_count]);
         $Pagination->SetPageSize($page_size);
         $Pagination->SetPage($page);
-        $records_array = $records->offset($Pagination->offset)->limit($Pagination->limit)->orderBy('id asc')->all();
+        $records_array = $records->offset($Pagination->offset)->limit($Pagination->limit)->orderBy('id desc')->all();
 
         $list = array();
         foreach ($records_array as $record) {
             $list[] = [
             	'id' => $record->id,
                 'course' => $record->course->name,
+            	'status' => $record->status,
             	'result' => $record->result,
             	'longitude' => $record->longitude,
             	'latitude' => $record->latitude,
+            	'date' => $record->date,
             	'time' => $record->time,
             	'created_date' => $record->created_date,
             	'update_date' => $record->update_date
@@ -199,7 +201,7 @@ class RecordService{
 		$Pagination = new Pagination(['totalCount' => $records_count]);
         $Pagination->SetPageSize($page_size);
         $Pagination->SetPage($page);
-        $records_array = $records->offset($Pagination->offset)->limit($Pagination->limit)->orderBy('id asc')->all();
+        $records_array = $records->offset($Pagination->offset)->limit($Pagination->limit)->orderBy('id desc')->all();
 
         $list = array();
         foreach ($records_array as $record) {
@@ -243,5 +245,30 @@ class RecordService{
         }
         
         return $rates;
+    }
+
+    /**
+     * 根据学生ID获取考勤记录
+     * 
+     * @param int $id ID
+     * @return array 考勤记录
+     */
+    public static function getRecordsByStudentId( $student_id ) {
+
+        $records = self::searchRecords(['student_id' => $student_id]);
+        $records_array = $records->orderBy('id desc')->all();
+
+        $list = array();
+        foreach ($records_array as $record) {
+            $list[] = [
+                'course' => $record->course->name,
+            	'status' => $record->status,
+            	'result' => $record->result,
+            	'date' => $record->date,
+            	'time' => $record->time,
+            ];
+        }
+
+        return $list;
     }
 }

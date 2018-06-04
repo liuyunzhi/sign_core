@@ -77,6 +77,9 @@ class ApiController extends Controller{
         }
     }
 
+    /**
+     * 获取当前课程
+     */
     private function getCurrentCourse(){
         $params = ClassLib::verify_post_params(['id']);
         $id = $params['id'];
@@ -97,6 +100,9 @@ class ApiController extends Controller{
         }
     }
 
+    /**
+     * 修改密码
+     */
     private function modifyPasword() {
         $params = ClassLib::verify_post_params(['account','old','new']);
         $account = $params['account'];
@@ -114,4 +120,13 @@ class ApiController extends Controller{
         }
     }
 
+    /**
+     * 获取考勤记录
+     */
+    private function getRecordList() {
+        $params = ClassLib::verify_post_params(['id']);
+        $id = $params['id'];
+        $result = RecordService::getRecordsByStudentId($id);
+        ClassLib::exit_json('000000', $result);
+    }
 }
